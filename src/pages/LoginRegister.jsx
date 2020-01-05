@@ -26,16 +26,24 @@ export default function LoginRegister() {
     e.preventDefault();
     let url = login ? "login" : "register";
     axios
-      .post(`http://localhost:8080/auth/${url}`, {
+      .post(`/auth/${url}`, {
         email: email,
         password: password
       })
-      .then(url === "login" ? (res) => {
-        localStorage.setItem("auth-token", res.data);
-        history.push("/dashboard");
-      } : ()=>{setSuccessRegistration(true);setLogin(true); setTimeout(()=>{
-        setSuccessRegistration(false);
-      },4000)})
+      .then(
+        url === "login"
+          ? res => {
+              localStorage.setItem("auth-token", res.data);
+              history.push("/dashboard");
+            }
+          : () => {
+              setSuccessRegistration(true);
+              setLogin(true);
+              setTimeout(() => {
+                setSuccessRegistration(false);
+              }, 4000);
+            }
+      )
       .catch(function(error) {
         if (error.response) {
           setError(error.response.data);
@@ -46,11 +54,10 @@ export default function LoginRegister() {
       });
   };
 
-
-//Dynamically changing style of sideNavigation
+  //Dynamically changing style of sideNavigation
   const rightLeft = login ? "rightSide" : "leftSide";
   const classNavigation = `Navigation ${rightLeft}`;
-  
+
   return (
     <div className="LoginRegister">
       <div className="Background" />
@@ -60,11 +67,16 @@ export default function LoginRegister() {
         onClose={() => {
           setError("");
         }}
-        style={error !== "" ? {display:"block"} : {display:"none"}}
+        style={error !== "" ? { display: "block" } : { display: "none" }}
       >
         {error}
       </Alert>
-      <Alert variant="success" style={successRegistration ? {display:"block"} : {display:"none"}}>You've been successfully registered!</Alert>
+      <Alert
+        variant="success"
+        style={successRegistration ? { display: "block" } : { display: "none" }}
+      >
+        You've been successfully registered!
+      </Alert>
       <div className="Form">
         <div className={classNavigation} onClick={handleNavigation}>
           <span>{login ? "Register" : "Log in "}</span>

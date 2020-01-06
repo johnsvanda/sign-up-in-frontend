@@ -26,7 +26,7 @@ export default function LoginRegister() {
     e.preventDefault();
     let url = login ? "login" : "register";
     axios
-      .post(`/auth/${url}`, {
+      .post(`https://sign-in-up.herokuapp.com/auth/${url}`, {
         email: email,
         password: password
       })
